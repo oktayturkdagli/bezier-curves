@@ -17,6 +17,11 @@ namespace Editor
         private void OnEnable()
         {
             creator = (PathCreator)target;
+            if (creator.path == null)
+            {
+                creator.CreatePath(distance, count);
+            }
+            path = creator.path;
         }
         
         public override void OnInspectorGUI()
@@ -129,17 +134,22 @@ namespace Editor
         
         private void DistanceMode()
         {
-            CountMode();
+            if (path == null)
+                return;
         }
         
         private void CountMode()
         {
-            creator.CreatePath(distance, count);
-            path = creator.path;
+            if (path == null)
+            {
+                creator.CreatePath(distance, count);
+                path = creator.path;
+            }
         }
 
         private void Cancel()
         {
+            creator.path = null;
             path = null;
         }
         

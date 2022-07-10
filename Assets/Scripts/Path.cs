@@ -4,45 +4,35 @@ using UnityEngine;
 [System.Serializable]
 public class Path 
 {
-    [SerializeField, HideInInspector] private List<Vector3> points;
-
+    [SerializeField, HideInInspector] private List<Vector3> leftPoints;
+    [SerializeField, HideInInspector] private List<Vector3> rightPoints;
+    
     public Path(Vector3 center, int distance, int count)
     {
-        points = new List<Vector3>
-        {
-            center, //Anchor Point
-            center + (Vector3.forward) * 0.5f, //Control Point
-            center + (Vector3.forward) * .5f, //Control Point
-            center + Vector3.forward//Anchor Point
-        };
-
-        for (var i = 0; i < count - 2; i++)
-        {
-            AddSegment(center + Vector3.forward * (i + 2));
-        }
+        var leftCenter = center + (Vector3.left * (distance / 2));
+        var rightCenter = center + (Vector3.right * (distance / 2));
+        leftPoints = CreatePoints(leftCenter, count, PointType.LeftPoint);
+        rightPoints = CreatePoints(rightCenter, count, PointType.RightPoint);
     }
 
-    public Vector3 this[int i] => points[i];
-
-    public int NumPoints => points.Count;
-
-    public int NumSegments => (points.Count - 4) / 3 + 1;
-
-    public void AddSegment(Vector3 newPosition)
+    public void AddSegment(Vector3 newPosition, int distance)
     {
-        newPosition.y = 0;
-        points.Add(points[points.Count - 1] * 2 - points[points.Count - 2]); // Second control point for previous last Anchor
-        points.Add((points[points.Count - 1] + newPosition) * .5f); // Control point for last Anchor
-        points.Add(newPosition); // New Anchor (Which is last Anchor now) added
+        var leftCenter = newPosition + (Vector3.left * (distance / 2));
+        var rightCenter = newPosition + (Vector3.right * (distance / 2));
+        AddPoint(leftCenter, PointType.LeftPoint);
+        AddPoint(rightCenter, PointType.RightPoint);
     }
 
-    public Vector3[] GetPointsInSegment(int i)
+    public Vector3[] GetPointsInSegment(int i, PointType pointType)
     {
-        return new Vector3[] { points[i * 3], points[i * 3 + 1], points[i * 3 + 2], points[i * 3 + 3] };
+        return GetPoints(i, pointType);
     }
 
-    public void MovePoint(int i, Vector3 pos)
+    public void MovePoint(int i, Vector3 pos, PointType pointType)
     {
+        pos.y = 0;
+        var points = pointType == PointType.LeftPoint ? leftPoints : rightPoints;
+
         Vector3 deltaMove = pos - points[i];
         points[i] = pos;
 
@@ -72,4 +62,66 @@ public class Path
         }
     }
 
+    public Vector3 Point(int i, PointType pointType)
+    {
+        return pointType == PointType.LeftPoint ? leftPoints[i] : rightPoints[i];
+    }
+
+    public int NumPoints(PointType pointType)
+    {
+        return pointType == PointType.LeftPoint ? leftPoints.Count : rightPoints.Count;
+    }
+
+    public int NumSegments(PointType pointType)
+    {
+        return pointType == PointType.LeftPoint ? (leftPoints.Count - 4) / 3 + 1 : (rightPoints.Count - 4) / 3 + 1;
+    }
+
+    private List<Vector3> CreatePoints(Vector3 center, int count, PointType pointType)
+    {
+        center.y = 0;
+        var points = new List<Vector3>
+        {
+            center, //Anchor Point
+            center + (Vector3.forward) * 0.5f, //Control Point
+            center + (Vector3.forward) * .5f, //Control Point
+            center + Vector3.forward//Anchor Point
+        };
+        
+        for (var i = 0; i < count - 2; i++) // Add other segments
+        {
+            Vector3 newPosition = center + Vector3.forward * (i + 2);
+            points.Add(points[points.Count - 1] * 2 - points[points.Count - 2]); // Second control point for previous last Anchor
+            points.Add((points[points.Count - 1] + newPosition) * .5f); // Control point for last Anchor
+            points.Add(newPosition); // New Anchor (Which is last Anchor now) added
+        }
+        
+        return points;
+    }
+    
+    private void AddPoint(Vector3 newPosition, PointType pointType)
+    {
+        var points = pointType == PointType.LeftPoint ? leftPoints : rightPoints;
+        newPosition.y = 0;
+        points.Add(points[points.Count - 1] * 2 - points[points.Count - 2]); // Second control point for previous last Anchor
+        points.Add((points[points.Count - 1] + newPosition) * .5f); // Control point for last Anchor
+        points.Add(newPosition); // New Anchor (Which is last Anchor now) added
+    }
+    
+    private Vector3[] GetPoints(int i, PointType pointType)
+    {
+        var points = leftPoints;
+        if (pointType == PointType.RightPoint)
+            points = rightPoints;
+        
+        return new Vector3[] { points[i * 3], points[i * 3 + 1], points[i * 3 + 2], points[i * 3 + 3] };
+    }
+
+}
+
+[System.Serializable]
+public enum PointType
+{
+    LeftPoint,
+    RightPoint
 }

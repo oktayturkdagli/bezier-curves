@@ -11,7 +11,8 @@ namespace Editor
         
         [Range(2, 100)] private int controlPoints = 2;
         private int distance = 5, count = 4;
-        private const string HelpBoxText = "\nYou can create your own paths using this editor.\n";
+        private const string HelpBoxText = "\nYou can create your own paths using this editor.\n" + 
+                                           "\nYou can add new segments by pressing Shift + Mouse Left Click.\n";
         
         private void OnEnable()
         {
@@ -40,7 +41,8 @@ namespace Editor
             if (guiEvent.type == EventType.MouseDown && guiEvent.button == 0 && guiEvent.shift)
             {
                 Undo.RecordObject(creator, "Add segment");
-                path.AddSegment(mousePos);
+                count++;
+                path.AddSegment(mousePos, distance);
             }
         }
 
@@ -48,10 +50,16 @@ namespace Editor
         {
             if (path == null) 
                 return;
-            
-            for (var i = 0; i < path.NumSegments; i++)
+
+            DrawMyPoints(PointType.LeftPoint);
+            DrawMyPoints(PointType.RightPoint);
+        }
+        
+        private void DrawMyPoints(PointType pointType)
+        {
+            for (var i = 0; i < path.NumSegments(pointType); i++)
             {
-                var points = path.GetPointsInSegment(i);
+                var points = path.GetPointsInSegment(i, pointType);
                 Handles.color = Color.black;
                 // Handles.DrawLine(points[1], points[0]);
                 // Handles.DrawLine(points[2], points[3]);
@@ -59,13 +67,13 @@ namespace Editor
             }
             
             Handles.color = Color.red;
-            for (var i = 0; i < path.NumPoints; i += 3)
+            for (var i = 0; i < path.NumPoints(pointType); i += 3)
             {
-                Vector3 newPos = Handles.FreeMoveHandle(path[i], Quaternion.identity, .1f, Vector3.zero, Handles.CylinderHandleCap);
-                if (path[i] != newPos)
+                var newPos = Handles.FreeMoveHandle(path.Point(i, pointType), Quaternion.identity, .1f, Vector3.zero, Handles.CylinderHandleCap);
+                if (path.Point(i, pointType)!= newPos)
                 {
                     Undo.RecordObject(creator, "Move point");
-                    path.MovePoint(i, newPos);
+                    path.MovePoint(i, newPos, pointType);
                 }
             }
         }
@@ -85,14 +93,14 @@ namespace Editor
             count = EditorGUILayout.IntField(count, GUILayout.Width(50)); GUILayout.FlexibleSpace();GUILayout.FlexibleSpace();GUILayout.FlexibleSpace();
             EditorGUILayout.EndHorizontal();
             GUILayout.Space(10);
-            DrawButtons();
+            DrawMyButtons();
             
             EditorGUILayout.Space(20);
             EditorGUILayout.HelpBox(HelpBoxText, MessageType.None);
-            // EditorUtility.SetDirty(path);
+            EditorUtility.SetDirty(creator);
         }
 
-        private void DrawButtons()
+        private void DrawMyButtons()
         {
             GUILayout.BeginHorizontal();
             if (GUILayout.Button("Distance Mode"))

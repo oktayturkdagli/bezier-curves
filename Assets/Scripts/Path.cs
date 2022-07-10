@@ -6,13 +6,13 @@ public class Path
 {
     [SerializeField, HideInInspector] private List<Vector3> leftPoints;
     [SerializeField, HideInInspector] private List<Vector3> rightPoints;
-    
+
     public Path(Vector3 center, int distance, int count)
     {
-        var leftCenter = center + (Vector3.left * (distance / 2));
-        var rightCenter = center + (Vector3.right * (distance / 2));
-        leftPoints = CreatePoints(leftCenter, count, PointType.LeftPoint);
-        rightPoints = CreatePoints(rightCenter, count, PointType.RightPoint);
+        var leftCenter = center + (Vector3.left * distance / 2);
+        var rightCenter = center + (Vector3.right * distance / 2);
+        leftPoints = CreatePoints(leftCenter, count);
+        rightPoints = CreatePoints(rightCenter, count);
     }
 
     public void AddSegment(Vector3 newPosition, int distance)
@@ -74,10 +74,11 @@ public class Path
 
     public int NumSegments(PointType pointType)
     {
-        return pointType == PointType.LeftPoint ? (leftPoints.Count - 4) / 3 + 1 : (rightPoints.Count - 4) / 3 + 1;
+        // Constructor segment has 4 point but we count as 1 and other anchors has 3 element (Itself and 2 control point)
+        return pointType == PointType.LeftPoint ? leftPoints.Count/ 3 : rightPoints.Count/ 3;
     }
 
-    private List<Vector3> CreatePoints(Vector3 center, int count, PointType pointType)
+    private List<Vector3> CreatePoints(Vector3 center, int count)
     {
         center.y = 0;
         var points = new List<Vector3>
@@ -91,9 +92,9 @@ public class Path
         for (var i = 0; i < count - 2; i++) // Add other segments
         {
             Vector3 newPosition = center + Vector3.forward * (i + 2);
-            points.Add(points[points.Count - 1] * 2 - points[points.Count - 2]); // Second control point for previous last Anchor
-            points.Add((points[points.Count - 1] + newPosition) * .5f); // Control point for last Anchor
-            points.Add(newPosition); // New Anchor (Which is last Anchor now) added
+            points.Add(points[points.Count - 1] * 2 - points[points.Count - 2]);  // Second control point is adding for previous last Anchor
+            points.Add((points[points.Count - 1] + newPosition) * .5f); // New control point is adding for last Anchor
+            points.Add(newPosition); // New Anchor (Which is last Anchor now) is adding
         }
         
         return points;
@@ -103,9 +104,9 @@ public class Path
     {
         var points = pointType == PointType.LeftPoint ? leftPoints : rightPoints;
         newPosition.y = 0;
-        points.Add(points[points.Count - 1] * 2 - points[points.Count - 2]); // Second control point for previous last Anchor
-        points.Add((points[points.Count - 1] + newPosition) * .5f); // Control point for last Anchor
-        points.Add(newPosition); // New Anchor (Which is last Anchor now) added
+        points.Add(points[points.Count - 1] * 2 - points[points.Count - 2]); // Second control point is adding for previous last Anchor
+        points.Add((points[points.Count - 1] + newPosition) * .5f); // New control point is adding for last Anchor
+        points.Add(newPosition); // New Anchor (Which is last Anchor now) is adding
     }
     
     private Vector3[] GetPoints(int i, PointType pointType)
@@ -114,9 +115,8 @@ public class Path
         if (pointType == PointType.RightPoint)
             points = rightPoints;
         
-        return new Vector3[] { points[i * 3], points[i * 3 + 1], points[i * 3 + 2], points[i * 3 + 3] };
+        return new[] { points[i * 3], points[i * 3 + 1], points[i * 3 + 2], points[i * 3 + 3] };
     }
-
 }
 
 [System.Serializable]

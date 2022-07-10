@@ -102,14 +102,29 @@ namespace Editor
 
         private void DrawMyButtons()
         {
+            EditorGUI.BeginChangeCheck();
             GUILayout.BeginHorizontal();
             if (GUILayout.Button("Distance Mode"))
+            {
+                Undo.RecordObject(creator, "Distance Mode");
                 DistanceMode();
+            }
             if (GUILayout.Button("Count Mode"))
+            {
+                Undo.RecordObject(creator, "Count Mode");
                 CountMode();
+            }
             GUILayout.EndHorizontal();
             if (GUILayout.Button("Cancel"))
+            {
+                Undo.RecordObject(creator, "Cancel");
                 Cancel();
+            }
+
+            if (EditorGUI.EndChangeCheck())
+            {
+                SceneView.RepaintAll();
+            }
         }
         
         private void DistanceMode()

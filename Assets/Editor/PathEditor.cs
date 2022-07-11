@@ -49,6 +49,8 @@ namespace Editor
                 count++;
                 path.AddSegment(mousePos, distance);
             }
+            
+            HandleUtility.AddDefaultControl(0);
         }
 
         private void DrawMyScene()
@@ -66,8 +68,7 @@ namespace Editor
             {
                 var points = path.GetPointsInSegment(i, pointType);
                 Handles.color = Color.black;
-                // Handles.DrawLine(points[1], points[0]);
-                // Handles.DrawLine(points[2], points[3]);
+                // For a more detailed bezier implementation, check out the Path.cs/CalculateEvenlySpacedPoints function.
                 Handles.DrawBezier(points[0], points[3], points[1], points[2], Color.green, null, 2);
             }
             

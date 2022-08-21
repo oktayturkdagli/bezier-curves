@@ -3,9 +3,11 @@
 [ExecuteInEditMode]
 public class Utilities : MonoBehaviour
 {
-    public static void WriteConsole<T>(ref T value)
+    public static void LogMessage<T>(ref T message)
     {
-        print(value);
+        #if UNITY_EDITOR
+        print(message);
+        #endif
     }
     
 }

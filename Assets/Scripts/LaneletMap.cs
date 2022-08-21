@@ -9,7 +9,7 @@ public class LaneletMap
     private List<Lanelet> lanelets = new List<Lanelet>();
 
     public int ID { get => id; set => id = value; }
-    public List<Lanelet> Lanelet { get => lanelets; set => lanelets = value; }
+    public List<Lanelet> Lanelets { get => lanelets; set => lanelets = value; }
 
     public LaneletMap()
     {
@@ -18,9 +18,9 @@ public class LaneletMap
     
     public void AddLaneletDefault()
     {
-        Lanelet lanelet = new Lanelet(id);
+        Lanelet lanelet = new Lanelet();
         lanelet.AddWayDefault();
-        lanelets.Add(lanelet);
+        AddLanelet(lanelet);
     }
 
     public void AddLanelet(Lanelet lanelet)
@@ -28,6 +28,7 @@ public class LaneletMap
         Lanelet tempLanelet = lanelets.FirstOrDefault(element => element.ID == lanelet.ID);
         if (tempLanelet != null) lanelets.Remove(tempLanelet);
         
+        lanelet.AddOwner(id);
         lanelets.Add(lanelet);
     }
     

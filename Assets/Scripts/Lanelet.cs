@@ -13,13 +13,12 @@ public class Lanelet
     public List<int> Owners { get => owners; set => owners = value; }
     public List<Way> Ways { get => ways; set => ways = value; }
 
-    public Lanelet(int owner)
+    public Lanelet()
     {
         id = NumberManager.LaneletId++;
-        owners.Add(owner);
     }
     
-    private void AddOwner(int newOwner)
+    public void AddOwner(int newOwner)
     {
         bool isAlreadyOnList = owners.Contains(newOwner);
         if (isAlreadyOnList)
@@ -28,7 +27,7 @@ public class Lanelet
         owners.Add(newOwner);
     }
     
-    private void RemoveOwner(int owner)
+    public void RemoveOwner(int owner)
     {
         bool isOnList = owners.Contains(owner);
         if (!isOnList)
@@ -41,9 +40,9 @@ public class Lanelet
     {
         for (int i = 0; i < 2; i++)
         {
-            Way way = new Way(id);
+            Way way = new Way();
             way.AddNodeDefault();
-            ways.Add(way);
+            AddWay(way);
         }
     }
     
@@ -52,6 +51,7 @@ public class Lanelet
         Way tempWay = ways.FirstOrDefault(element => element.ID == way.ID);
         if (tempWay != null) ways.Remove(tempWay);
         
+        way.AddOwner(id);
         ways.Add(way);
     }
     

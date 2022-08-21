@@ -13,14 +13,13 @@ public class Node
     public Vector3 Position { get => position; set => position = value; }
     public List<int> Owners { get => owners; set => owners = value; }
 
-    public Node(int owner, Vector3 position)
+    public Node(Vector3 position)
     {
         id = NumberManager.NodeId++;
-        owners.Add(owner);
         this.position = position;
     }
 
-    private void AddOwner(int newOwner)
+    public void AddOwner(int newOwner)
     {
         bool isAlreadyOnList = owners.Contains(newOwner);
         if (isAlreadyOnList)
@@ -29,7 +28,7 @@ public class Node
         owners.Add(newOwner);
     }
     
-    private void RemoveOwner(int owner)
+    public void RemoveOwner(int owner)
     {
         bool isOnList = owners.Contains(owner);
         if (!isOnList)

@@ -13,13 +13,12 @@ public class Way
     public List<int> Owners { get => owners; set => owners = value; }
     public List<Node> Nodes { get => nodes; set => nodes = value; }
 
-    public Way(int owner)
+    public Way()
     {
         id = NumberManager.WayId++;
-        owners.Add(owner);
     }
 
-    private void AddOwner(int newOwner)
+    public void AddOwner(int newOwner)
     {
         bool isAlreadyOnList = owners.Contains(newOwner);
         if (isAlreadyOnList)
@@ -28,7 +27,7 @@ public class Way
         owners.Add(newOwner);
     }
     
-    private void RemoveOwner(int owner)
+    public void RemoveOwner(int owner)
     {
         bool isOnList = owners.Contains(owner);
         if (!isOnList)
@@ -44,8 +43,8 @@ public class Way
         for (int i = 0; i < 5; i++)
         {
             position.z = i;
-            Node node = new Node(id,  position);
-            nodes.Add(node);
+            Node node = new Node(position);
+            AddNode(node);
         }
     }
     
@@ -54,6 +53,7 @@ public class Way
         Node tempNode = nodes.FirstOrDefault(element => element.ID == node.ID);
         if (tempNode != null) nodes.Remove(tempNode);
         
+        node.AddOwner(id);
         nodes.Add(node);
     }
     
@@ -63,6 +63,59 @@ public class Way
         if (tempNode != null) nodes.Remove(tempNode);
         
         nodes.Remove(node);
+    }
+    
+    public Node GetNode(int index)
+    {
+        if (index >= nodes.Count)
+            return null;
+        
+        return nodes[index];
+    }
+    
+    public Node[] GetRealNodes(int index)
+    {
+        return new Node[] { nodes[index * 3], nodes[index * 3 + 1], nodes[index * 3 + 2], nodes[index * 3 + 3] };
+    }
+
+    public int NumSegments()
+    {
+        // Constructor segment has 4 point but we count as 1 and other anchors has 3 element (Itself and 2 control point)
+        return nodes.Count/ 3;
+    }
+    
+    public void MovePoint(int i, Vector3 pos)
+    {
+        pos.y = 0;
+        var nodeList = nodes;
+
+        Vector3 deltaMove = pos - nodeList[i].Position;
+        nodeList[i].Position = pos;
+
+        if (i % 3 == 0)
+        {
+            if (i + 1 < nodeList.Count)
+            {
+                nodeList[i + 1].Position += deltaMove;
+            }
+            if (i - 1 >= 0)
+            {
+                nodeList[i - 1].Position += deltaMove;
+            }
+        }
+        else
+        {
+            bool nextPointIsAnchor = (i + 1) % 3 == 0;
+            int correspondingControlIndex = (nextPointIsAnchor) ? i + 2 : i - 2;
+            int anchorIndex = (nextPointIsAnchor) ? i + 1 : i - 1;
+
+            if (correspondingControlIndex >= 0 && correspondingControlIndex < nodeList.Count)
+            {
+                float dst = (nodeList[anchorIndex].Position - nodeList[correspondingControlIndex].Position).magnitude;
+                Vector3 dir = (nodeList[anchorIndex].Position - pos).normalized;
+                nodeList[correspondingControlIndex].Position = nodeList[anchorIndex].Position + dir * dst;
+            }
+        }
     }
 
 }

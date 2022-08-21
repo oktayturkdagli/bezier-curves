@@ -1,6 +1,11 @@
 ﻿using UnityEngine;
 
-public class Utilities 
+[ExecuteInEditMode]
+public class Utilities : MonoBehaviour
 {
+    public static void WriteConsole<T>(ref T value)
+    {
+        print(value);
+    }
     
 }

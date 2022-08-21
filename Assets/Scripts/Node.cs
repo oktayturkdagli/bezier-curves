@@ -9,11 +9,15 @@ public class Node
     private Vector3 position;
     private List<int> owners = new List<int>(); // Way id's, which have this node
 
-    public Node(int id, Vector3 position, int owner)
+    public int ID { get => id; set => id = value; }
+    public Vector3 Position { get => position; set => position = value; }
+    public List<int> Owners { get => owners; set => owners = value; }
+
+    public Node(int owner, Vector3 position)
     {
-        this.id = NumberManager.NodeId++;
-        this.position = position;
+        id = NumberManager.NodeId++;
         owners.Add(owner);
+        this.position = position;
     }
 
     private void AddOwner(int newOwner)
@@ -23,6 +27,15 @@ public class Node
             return;
         
         owners.Add(newOwner);
+    }
+    
+    private void RemoveOwner(int owner)
+    {
+        bool isOnList = owners.Contains(owner);
+        if (!isOnList)
+            return;
+
+        owners.Remove(owner);
     }
     
 }

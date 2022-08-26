@@ -1,6 +1,9 @@
 ﻿using UnityEngine;
 
-public class InputManager 
+namespace LaneletProject
 {
-    
+    public class InputManager
+    {
+
+    }
 }

@@ -1,17 +1,20 @@
 ﻿using UnityEngine;
 
-public class Types 
+namespace LaneletProject
 {
-    enum Regulators
+    public class Types
     {
-        road,
-        crosswalk,
-        traffic_light,
-        traffic_sign,
-        speed_limit,
-        bus_stop,
-        detection_area,
-        speed_bump
+        enum Regulators
+        {
+            road,
+            crosswalk,
+            traffic_light,
+            traffic_sign,
+            speed_limit,
+            bus_stop,
+            detection_area,
+            speed_bump
+        }
+
     }
-    
 }

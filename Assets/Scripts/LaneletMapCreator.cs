@@ -58,7 +58,7 @@ public class LaneletMapCreator : MonoBehaviour
             
             for (var j = 0; j < nodeCount - 2; j++) // Add other segments
             {
-                Vector3 newPosition = center + Vector3.forward * (i + 2);
+                Vector3 newPosition = center + Vector3.forward * (j + 2);
                 AddSegments(newPosition, way);
             }
             

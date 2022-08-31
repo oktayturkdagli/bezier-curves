@@ -7,16 +7,9 @@ namespace LaneletProject
     [System.Serializable]
     public abstract class Node
     {
-        private int id;
         private Vector3 position;
         private List<int> owners = new List<int>(); // Way id's, which have this node
-
-        public int ID
-        {
-            get => id;
-            set => id = value;
-        }
-
+        
         public Vector3 Position
         {
             get => position;
@@ -31,7 +24,6 @@ namespace LaneletProject
 
         public Node(Vector3 position)
         {
-            id = NumberManager.NodeId++;
             this.position = position;
         }
 

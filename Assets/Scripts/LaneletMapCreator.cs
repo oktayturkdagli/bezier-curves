@@ -1,5 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 using Node = UnityEditor.Experimental.GraphView.Node;
 
 namespace LaneletProject
@@ -46,35 +48,33 @@ namespace LaneletProject
                 center.y = 0;
 
                 Way way = lanelet.Ways[i];
-                var nodes = new List<Node>
-                {
-                    new NodeAnchor(center + Vector3.back),
-                    new NodeControl(center + (Vector3.back + Vector3.left) * 0.5f),
-                    new NodeControl(center + (Vector3.forward + Vector3.right) * 0.5f),
-                    new NodeAnchor(center + Vector3.forward)
-                };
-
-                for (var j = 0; j < nodes.Count; j++)
-                {
-                    way.AddNode(nodes[j]);
-                }
                 
-                for (var j = 0; j < nodeCount - 2; j++) // Add other segments
+                NodeAnchor node1 = new NodeAnchor(center + Vector3.back);
+                NodeAnchor node2 = new NodeAnchor(center + Vector3.forward);
+                node1.AddControlNode(new NodeControl(center + (Vector3.back + Vector3.left) * 0.5f));
+                node2.AddControlNode(new NodeControl(center + (Vector3.forward + Vector3.right) * 0.5f));
+                way.AddNode(node1);
+                way.AddNode(node2);
+                
+                for (var j = 2; j < 10; j++) // Add other segments
                 {
-                    Vector3 newPosition = center + Vector3.forward * (j + 2);
+                    Vector3 newPosition = center +  j * Vector3.forward;
                     AddSegments(newPosition, way);
                 }
-                
             }
         }
 
         public void AddSegments(Vector3 newPosition, Way way)
         {
-            List<Node> wayNodes = way.Nodes;
+            List<NodeAnchor> wayNodes = way.Nodes;
             newPosition.y = 0;
-            way.AddNode(new NodeControl(wayNodes[wayNodes.Count - 1].Position * 2 - wayNodes[wayNodes.Count - 2].Position)); // Second control point is adding for previous last Anchor
-            way.AddNode(new NodeControl((wayNodes[wayNodes.Count - 1].Position + newPosition) * 0.5f)); // New control point is adding for last Anchor
-            way.AddNode(new NodeAnchor(newPosition)); // New Anchor (Which is last Anchor now) is adding
+            NodeAnchor lastNode = wayNodes.Last();
+            NodeControl newControlNode1 = new NodeControl(lastNode.Position + (lastNode.Position - lastNode.ControlNodes.Last().Position)); // Second control point is adding for previous last Anchor
+            lastNode.AddControlNode(newControlNode1);
+            NodeAnchor newAnchorNode = new NodeAnchor(newPosition); // New Anchor (Which is last Anchor now) is adding
+            NodeControl newControlNode2 = new NodeControl((lastNode.ControlNodes.Last().Position + newAnchorNode.Position) * 0.5f); // New control point is adding for last Anchor
+            newAnchorNode.AddControlNode(newControlNode2);
+            way.AddNode(newAnchorNode);
         }
         
         public void RemoveLaneletMap()

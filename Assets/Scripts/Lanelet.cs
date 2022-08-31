@@ -8,6 +8,7 @@ namespace LaneletProject
     public class Lanelet
     {
         private int id;
+        //TODO: convert owners laneletmap type
         private List<int> owners = new List<int>(); // Lanelet id's, which have this way
         private List<Way> ways = new List<Way>();
 

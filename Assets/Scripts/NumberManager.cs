@@ -1,10 +1,12 @@
 ﻿using UnityEngine;
 
 namespace LaneletProject
-{
+{//TODO: Conver IDMANAGER
     public class NumberManager
     {
-        public static int NodeId { get; set; }
+        public static int NodeAnchorId { get; set; }
+        
+        public static int NodeControlId { get; set; }
 
         public static int WayId { get; set; }
 
@@ -12,9 +14,10 @@ namespace LaneletProject
 
         public static int LaneletMapId { get; set; }
 
-        public NumberManager(int nodeId = 0, int wayId = 0, int laneletId = 0, int laneletMapId = 0)
+        public NumberManager(int nodeAnchorId = 0, int nodeControlId = 0, int wayId = 0, int laneletId = 0, int laneletMapId = 0)
         {
-            NodeId = nodeId;
+            NodeAnchorId = nodeAnchorId;
+            NodeControlId = nodeControlId;
             WayId = wayId;
             LaneletId = laneletId;
             LaneletMapId = laneletId;

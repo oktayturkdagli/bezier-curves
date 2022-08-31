@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 using UnityEditor;
 using LaneletProject;
 
@@ -70,20 +71,52 @@ namespace Editor
                     {
                         Way way = lanelet.Ways[k];
                         Handles.color = Color.black;
-                        for (var l = 0; l < way.NumSegments(); l++)
+                        List<NodeAnchor> wayNodes = way.Nodes;
+                        for (var l = 0; l < wayNodes.Count; l++)
                         {
-                            Node[] nodes = way.GetRealNodes(l);
-                            Handles.DrawBezier(nodes[0].Position, nodes[3].Position, nodes[1].Position, nodes[2].Position, Color.green, null, 2);
+                            NodeAnchor currentNode = wayNodes[l];
+                            NodeAnchor nextNode;
+                            if (l == 0)
+                            {
+                                //TODO: This area have some errors
+                                nextNode = wayNodes[l + 1];
+                                NodeControl controlNode1 = currentNode.ControlNodes[0];
+                                Handles.DrawBezier(currentNode.Position, nextNode.Position, controlNode1.Position, controlNode1.Position, Color.green, null, 2);
+                            }
+                            else if (l + 1 < wayNodes.Count)
+                            {
+                                nextNode = wayNodes[l + 1];
+                                NodeControl controlNode1 = currentNode.ControlNodes[0];
+                                NodeControl controlNode2 = currentNode.ControlNodes[1];
+                                Handles.DrawBezier(currentNode.Position, nextNode.Position, controlNode1.Position, controlNode2.Position, Color.green, null, 2);
+                            }
+                            else
+                            {
+                                
+                            }
                         }
                         
-                        Handles.color = Color.red;
-                        for (var m = 0; m < way.Nodes.Count; m += 3)
+                        for (var m = 0; m < wayNodes.Count; m++)
                         {
-                            var newPos = Handles.FreeMoveHandle(way.GetNode(m).Position, Quaternion.identity, .1f, Vector3.zero, Handles.CylinderHandleCap);
-                            if (way.GetNode(m).Position != newPos)
+                            Handles.color = Color.red;
+                            NodeAnchor anchorNode = wayNodes[m];
+                            var newAnchorPos = Handles.FreeMoveHandle(anchorNode.Position, Quaternion.identity, .1f, Vector3.zero, Handles.CylinderHandleCap);
+                            if (anchorNode.Position != newAnchorPos)
                             {
-                                Undo.RecordObject(this, "Move point");
-                                way.MovePoint(m, newPos);
+                                Undo.RecordObject(this, "Move Anchor Node");
+                                way.MoveAnchorNode(m, newAnchorPos);
+                            }
+                            
+                            Handles.color = Color.blue;
+                            for (int n = 0; n < anchorNode.ControlNodes.Count; n++)
+                            {
+                                NodeControl controlNode = anchorNode.ControlNodes[n];
+                                var newControlPos = Handles.FreeMoveHandle(controlNode.Position, Quaternion.identity, .05f, Vector3.zero, Handles.CylinderHandleCap);
+                                if (controlNode.Position != newControlPos)
+                                {
+                                    Undo.RecordObject(this, "Move Control Node");
+                                    way.MoveControlNode(n, newControlPos);
+                                }
                             }
                         }
                     }

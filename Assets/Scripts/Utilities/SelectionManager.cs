@@ -2,7 +2,7 @@
 
 namespace LaneletProject
 {
-    public class InputManager
+    public class SelectionManager
     {
 
     }

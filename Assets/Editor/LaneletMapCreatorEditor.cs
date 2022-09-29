@@ -48,7 +48,7 @@ namespace Editor
             }
             
             EditorGUILayout.Space(20);
-            EditorGUILayout.HelpBox("Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime mollitia, molestiae quas", MessageType.None);
+            EditorGUILayout.HelpBox("All operations related to Laneletmap are in this panel.", MessageType.None);
         }
         
         private void DrawMyScene()

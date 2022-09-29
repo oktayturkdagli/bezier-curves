@@ -18,7 +18,7 @@ namespace LaneletProject
             Way tempWay = Ways.FirstOrDefault(element => element.Id == way.Id);
             if (tempWay != null) Ways.Remove(tempWay);
 
-            way.AddOwner(Id);
+            way.AddOwner(this);
             Ways.Add(way);
         }
 

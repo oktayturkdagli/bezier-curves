@@ -8,12 +8,7 @@ namespace Editor
     [CustomEditor(typeof(LaneletMapCreator))]
     public class LaneletMapCreatorEditor : UnityEditor.Editor
     {
-        private LaneletMapCreator laneletMapCreator = null;
-        
-        private void OnEnable()
-        {
-            laneletMapCreator = (LaneletMapCreator) target;
-        }
+        private LaneletMapCreator laneletMapCreator => (LaneletMapCreator) target;
 
         public override void OnInspectorGUI()
         {

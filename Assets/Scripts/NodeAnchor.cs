@@ -21,7 +21,7 @@ namespace LaneletProject
             if (ControlNodes.Count > 1)
                 return;
 
-            node.AddOwner(Id);
+            node.AddOwner(this);
             ControlNodes.Add(node);
         }
 

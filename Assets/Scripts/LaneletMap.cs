@@ -18,7 +18,7 @@ namespace LaneletProject
             Lanelet tempLanelet = Lanelets.FirstOrDefault(element => element.Id == lanelet.Id);
             if (tempLanelet != null) Lanelets.Remove(tempLanelet);
 
-            lanelet.AddOwner(Id);
+            lanelet.AddOwner(this);
             Lanelets.Add(lanelet);
         }
 

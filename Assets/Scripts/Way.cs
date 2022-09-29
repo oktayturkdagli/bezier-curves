@@ -19,7 +19,7 @@ namespace LaneletProject
             NodeAnchor tempNode = Nodes.FirstOrDefault(element => element.Id == node.Id);
             if (tempNode != null) Nodes.Remove(tempNode);
 
-            node.AddOwner(Id);
+            node.AddOwner(this);
             Nodes.Add(node);
         }
 

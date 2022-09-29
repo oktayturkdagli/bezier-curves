@@ -5,9 +5,9 @@ namespace LaneletProject
     public interface IElement
     {
         int Id { get; set; }
-        List<int> Owners { get; set; } //TODO: convert owners laneletmap type
+        List<IElement> Owners { get; set; } //TODO: convert owners laneletmap type
         
-        public void AddOwner(int newOwner);
-        public void RemoveOwner(int Owner);
+        public void AddOwner(IElement newOwner);
+        public void RemoveOwner(IElement Owner);
     }
 }

@@ -78,21 +78,21 @@ namespace Editor
                             NodeAnchor nextNode;
                             if (l == 0)
                             {
-                                //TODO: This area have some errors
                                 nextNode = wayNodes[l + 1];
                                 NodeControl controlNode1 = currentNode.ControlNodes[0];
-                                Handles.DrawBezier(currentNode.Position, nextNode.Position, controlNode1.Position, controlNode1.Position, Color.green, null, 2);
-                            }
-                            else if (l + 1 < wayNodes.Count)
-                            {
-                                nextNode = wayNodes[l + 1];
-                                NodeControl controlNode1 = currentNode.ControlNodes[0];
-                                NodeControl controlNode2 = currentNode.ControlNodes[1];
+                                NodeControl controlNode2 = nextNode.ControlNodes[0];
                                 Handles.DrawBezier(currentNode.Position, nextNode.Position, controlNode1.Position, controlNode2.Position, Color.green, null, 2);
+                            }
+                            else if (l  == wayNodes.Count - 1)
+                            {
+                                //Do nothing
                             }
                             else
                             {
-                                
+                                nextNode = wayNodes[l + 1];
+                                NodeControl controlNode1 = currentNode.ControlNodes[1];
+                                NodeControl controlNode2 = nextNode.ControlNodes[0];
+                                Handles.DrawBezier(currentNode.Position, nextNode.Position, controlNode1.Position, controlNode2.Position, Color.green, null, 2);
                             }
                         }
                         
@@ -125,7 +125,6 @@ namespace Editor
             }
             
         }
-        
         
     }
 }

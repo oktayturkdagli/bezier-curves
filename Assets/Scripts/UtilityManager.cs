@@ -2,9 +2,8 @@
 
 namespace LaneletProject
 {
-    //TODO: Convert UtilityManager
     [ExecuteInEditMode]
-    public class Utilities : MonoBehaviour
+    public class UtilityManager : MonoBehaviour
     {
         public static void LogMessage<T>(ref T message)
         {
@@ -12,6 +11,5 @@ namespace LaneletProject
             print(message);
             #endif
         }
-
     }
 }

@@ -1,54 +1,33 @@
-﻿using UnityEngine;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 
 namespace LaneletProject
 {
     [System.Serializable]
-    public class LaneletMap
+    public class LaneletMap : Element
     {
-        private int id;
-        private List<Lanelet> lanelets = new List<Lanelet>();
-
-        public int ID
-        {
-            get => id;
-            set => id = value;
-        }
-
-        public List<Lanelet> Lanelets
-        {
-            get => lanelets;
-            set => lanelets = value;
-        }
+        public List<Lanelet> Lanelets { get; set; }
 
         public LaneletMap()
         {
-            id = NumberManager.LaneletMapId++;
-        }
-
-        public void AddLaneletDefault()
-        {
-            Lanelet lanelet = new Lanelet();
-            lanelet.AddWayDefault();
-            AddLanelet(lanelet);
+            Lanelets = new List<Lanelet>();
         }
 
         public void AddLanelet(Lanelet lanelet)
         {
-            Lanelet tempLanelet = lanelets.FirstOrDefault(element => element.ID == lanelet.ID);
-            if (tempLanelet != null) lanelets.Remove(tempLanelet);
+            Lanelet tempLanelet = Lanelets.FirstOrDefault(element => element.Id == lanelet.Id);
+            if (tempLanelet != null) Lanelets.Remove(tempLanelet);
 
-            lanelet.AddOwner(id);
-            lanelets.Add(lanelet);
+            lanelet.AddOwner(Id);
+            Lanelets.Add(lanelet);
         }
 
         public void RemoveLanelet(Lanelet lanelet)
         {
-            Lanelet tempLanelet = lanelets.FirstOrDefault(element => element.ID == lanelet.ID);
-            if (tempLanelet != null) lanelets.Remove(tempLanelet);
+            Lanelet tempLanelet = Lanelets.FirstOrDefault(element => element.Id == lanelet.Id);
+            if (tempLanelet != null) Lanelets.Remove(tempLanelet);
 
-            lanelets.Remove(lanelet);
+            Lanelets.Remove(lanelet);
         }
 
     }

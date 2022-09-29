@@ -1,70 +1,68 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
-using Node = UnityEditor.Experimental.GraphView.Node;
 
 namespace LaneletProject
 {
     [ExecuteInEditMode]
     public class LaneletMapCreator : MonoBehaviour 
     {
-        private int id;
-        private List<LaneletMap> laneletMaps = new List<LaneletMap>();
-
-        public int ID { get => id; set => id = value; }
-        public List<LaneletMap> LaneletMaps { get => laneletMaps; set => laneletMaps = value; }
+        public List<LaneletMap> LaneletMaps { get; set; } = new List<LaneletMap>();
 
         public void AddLaneletMapDefault(Vector3 position = default)
         {
             var text = "CreateLaneletMapDefault";
-            Utilities.LogMessage<string>(ref text);
+            UtilityManager.LogMessage<string>(ref text);
             
+            // Width and Node Count
+            float width = 5; 
+            int nodeCount = 10;
+            
+            // Add default way
             LaneletMap laneletMap = new LaneletMap();
-            laneletMaps.Add(laneletMap);
-            laneletMap.AddLaneletDefault();
-        }
-        
-        public void AddLaneletMap(float width = 5, int nodeCount = 5)
-        {
-            var text = "CreateLaneletMap";
-            Utilities.LogMessage<string>(ref text);
-
-            LaneletMap laneletMap = new LaneletMap();
-            laneletMaps.Add(laneletMap);
+            LaneletMaps.Add(laneletMap);
             Lanelet lanelet = new Lanelet();
             laneletMap.AddLanelet(lanelet);
             Way way1 = new Way();
             lanelet.AddWay(way1);
             Way way2 = new Way();
             lanelet.AddWay(way2);
-
-            Vector3 defaultCenter = Vector3.zero;
-
+            
+            // Detect Origin
+            Vector3 defaultOrigin = Vector3.zero;
+            
+            // Add Nodes
             for (var i = 0; i < lanelet.Ways.Count; i++)
             {
                 var direction = i % 2 == 0 ? -1 : 1 ;
-                Vector3 center = (defaultCenter + Vector3.right * width / 2) * direction;
-                center.y = 0;
-
+                Vector3 origin = (defaultOrigin + Vector3.right * width / 2) * direction;
+                origin.y = 0;
+                
                 Way way = lanelet.Ways[i];
                 
-                NodeAnchor node1 = new NodeAnchor(center + Vector3.back);
-                NodeAnchor node2 = new NodeAnchor(center + Vector3.forward);
-                node1.AddControlNode(new NodeControl(center + (Vector3.back + Vector3.left) * 0.5f));
-                node2.AddControlNode(new NodeControl(center + (Vector3.forward + Vector3.right) * 0.5f));
+                NodeAnchor node1 = new NodeAnchor(origin + Vector3.back);
+                NodeAnchor node2 = new NodeAnchor(origin + Vector3.forward);
+                node1.AddControlNode(new NodeControl(origin + Vector3.back * 0.5f));
+                node2.AddControlNode(new NodeControl(origin + Vector3.forward * 0.5f));
                 way.AddNode(node1);
                 way.AddNode(node2);
                 
-                for (var j = 2; j < 10; j++) // Add other segments
+                for (var j = 2; j < nodeCount; j++) // Add other segments
                 {
-                    Vector3 newPosition = center +  j * Vector3.forward;
+                    Vector3 newPosition = origin +  j * Vector3.forward;
                     AddSegments(newPosition, way);
                 }
             }
         }
+        
+        public void AddLaneletMap()
+        {
+            var text = "CreateLaneletMap";
+            UtilityManager.LogMessage<string>(ref text);
+            
+        }
 
-        public void AddSegments(Vector3 newPosition, Way way)
+        private void AddSegments(Vector3 newPosition, Way way)
         {
             List<NodeAnchor> wayNodes = way.Nodes;
             newPosition.y = 0;
@@ -80,9 +78,9 @@ namespace LaneletProject
         public void RemoveLaneletMap()
         {
             var text = "RemoveLaneletMap";
-            Utilities.LogMessage<string>(ref text);
+            UtilityManager.LogMessage<string>(ref text);
 
-            laneletMaps.Clear();
+            LaneletMaps.Clear();
         }
     }
 }

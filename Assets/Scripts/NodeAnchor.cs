@@ -6,42 +6,30 @@ namespace LaneletProject
 {
     public class NodeAnchor : Node
     {
-        private int id;
-        private List<NodeControl> controlNodes = new List<NodeControl>(); // Control nodes of this node
-
-        public int ID
-        {
-            get => id;
-            set => id = value;
-        }
-        
-        public List<NodeControl> ControlNodes
-        {
-            get => controlNodes;
-            set => controlNodes = value;
-        }
+        public List<NodeControl> ControlNodes { get; set; }
         
         public NodeAnchor(Vector3 position) : base(position)
         {
-            id = NumberManager.NodeAnchorId++;
+            ControlNodes = new List<NodeControl>();
         }
-        
+
         public void AddControlNode(NodeControl node)
         {
-            NodeControl tempNode = controlNodes.FirstOrDefault(element => element.ID == node.ID);
-            if (tempNode != null) controlNodes.Remove(tempNode);
+            NodeControl tempNode = ControlNodes.FirstOrDefault(element => element.Id == node.Id);
+            if (tempNode != null) ControlNodes.Remove(tempNode);
             
-            if (controlNodes.Count > 1)
+            if (ControlNodes.Count > 1)
                 return;
 
-            node.AddOwner(id);
-            controlNodes.Add(node);
+            node.AddOwner(Id);
+            ControlNodes.Add(node);
         }
 
         public void RemoveControlNode(NodeControl node)
         {
-            NodeControl tempNode = controlNodes.FirstOrDefault(element => element.ID == node.ID);
-            if (tempNode != null) controlNodes.Remove(tempNode);
+            NodeControl tempNode = ControlNodes.FirstOrDefault(element => element.Id == node.Id);
+            if (tempNode != null) ControlNodes.Remove(tempNode);
         }
+        
     }
 }

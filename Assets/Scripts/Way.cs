@@ -8,19 +8,32 @@ namespace LaneletProject
     public class Way : Element
     {
         public List<NodeAnchor> Nodes { get; set; }
-        
-        public Way()
+
+        public override void Init()
         {
+            base.Init();
             Nodes = new List<NodeAnchor>();
+            Type = ElementTypes.Way;
         }
-
-        public void AddNode(NodeAnchor node)
+        
+        public NodeAnchor AddNode(Vector3 position = default)
         {
-            NodeAnchor tempNode = Nodes.FirstOrDefault(element => element.Id == node.Id);
-            if (tempNode != null) Nodes.Remove(tempNode);
-
+            var text = "AddNode";
+            UtilityManager.LogMessage<string>(ref text);
+            
+            GameObject newObj = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+            newObj.transform.parent = transform;
+            newObj.transform.localPosition = position;
+            newObj.transform.localRotation = Quaternion.identity;
+            newObj.transform.localScale = Vector3.one * 0.1f;
+            NodeAnchor node = newObj.AddComponent<NodeAnchor>();
+            newObj.name = UtilityManager.NameChanger(node.Id, ElementTypes.AnchorNode);
+            
+            node.Init();
+            newObj.GetComponent<Renderer>().sharedMaterial = UtilityManager.MaterialRequest(node.Type);
             node.AddOwner(this);
             Nodes.Add(node);
+            return node;
         }
 
         public void RemoveNode(NodeAnchor node)

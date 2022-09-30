@@ -10,14 +10,14 @@ namespace Editor
     {
         private LaneletMapCreator laneletMapCreator => (LaneletMapCreator) target;
 
-        public override void OnInspectorGUI()
+        public override void OnInspectorGUI() //TODO: Always opened hierarchy
         {
             DrawMyInspector();
         }
         
         private void OnSceneGUI()
         {
-            DrawMyScene();
+            // DrawMyScene();
         }
 
         private void DrawMyInspector()

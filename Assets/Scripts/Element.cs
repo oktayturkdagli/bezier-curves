@@ -1,18 +1,22 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using UnityEngine;
 
 namespace LaneletProject
 {
-    public abstract class Element : IElement
+    [ExecuteInEditMode]
+    public abstract class Element : MonoBehaviour, IElement
     {
         public int Id { get; set; }
-        public List<IElement> Owners { get; set; }
+        public ElementTypes Type { get; set; }
+        public List<IElement> Owners { get; set; } = new List<IElement>();
 
-        public Element()
+        public virtual void Init()
         {
-            Id = IdManager.GlobalId++;
+            Id = IdManager.Instance.GlobalId++;
             Owners = new List<IElement>();
         }
-
+        
         public virtual void AddOwner(IElement newOwner)
         {
             bool isAlreadyOnList = Owners.Contains(newOwner);
@@ -21,7 +25,7 @@ namespace LaneletProject
             
             Owners.Add(newOwner);
         }
-
+        
         public virtual void RemoveOwner(IElement owner)
         {
             bool isOnList = Owners.Contains(owner);

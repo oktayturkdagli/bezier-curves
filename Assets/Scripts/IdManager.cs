@@ -1,27 +1,40 @@
-﻿namespace LaneletProject
+﻿using UnityEditor;
+using UnityEngine;
+
+namespace LaneletProject
 {
-    public class IdManager
+    [ExecuteInEditMode]
+    public class IdManager : MonoBehaviour
     {
-        public static int GlobalId { get; set; }
-        
-        public static int NodeAnchorId { get; set; }
-        
-        public static int NodeControlId { get; set; }
+        public static IdManager Instance { get; set; }
 
-        public static int WayId { get; set; }
-
-        public static int LaneletId { get; set; }
-
-        public static int LaneletMapId { get; set; }
-
-        public IdManager(int globalId = 0, int laneletMapId = 0, int laneletId = 0, int wayId = 0, int nodeControlId = 0, int nodeAnchorId = 0)
+        private void OnEnable()
         {
-            GlobalId = globalId;
-            NodeAnchorId = nodeAnchorId;
-            NodeControlId = nodeControlId;
-            WayId = wayId;
-            LaneletId = laneletId;
-            LaneletMapId = laneletId;
+            if (Instance != null && Instance != this)
+            {
+                DestroyImmediate(this);
+            }
+            else
+            {
+                Instance = this;
+            }
+        }
+
+        public int GlobalId { get; set; } = 0;
+        
+        public int NodeAnchorId { get; set; } = 0;
+        
+        public int NodeControlId { get; set; } = 0;
+
+        public int WayId { get; set; } = 0;
+
+        public int LaneletId { get; set; } = 0;
+
+        public int LaneletMapId { get; set; } = 0;
+
+        public int TakeId()
+        {
+            return GlobalId++;
         }
     }
 }

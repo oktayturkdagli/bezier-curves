@@ -10,7 +10,7 @@ namespace LaneletProject
         public int Id { get; set; }
         public ElementTypes Type { get; set; }
         public List<IElement> Owners { get; set; } = new List<IElement>();
-
+        
         public virtual void Init()
         {
             Id = IdManager.Instance.GlobalId++;

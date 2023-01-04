@@ -8,7 +8,7 @@ namespace LaneletProject
     public class Way : Element
     {
         public List<NodeAnchor> Nodes { get; set; }
-
+        
         public override void Init()
         {
             base.Init();
@@ -35,7 +35,7 @@ namespace LaneletProject
             Nodes.Add(node);
             return node;
         }
-
+        
         public void RemoveNode(NodeAnchor node)
         {
             NodeAnchor tempNode = Nodes.FirstOrDefault(element => element.Id == node.Id);

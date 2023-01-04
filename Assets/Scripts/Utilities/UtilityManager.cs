@@ -1,5 +1,4 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace LaneletProject
 {
@@ -8,7 +7,7 @@ namespace LaneletProject
     {
         private static Material anchorNodeMaterial;
         private static Material controlNodeMaterial;
-
+        
         public static void LogMessage<T>(ref T message)
         {
             #if UNITY_EDITOR

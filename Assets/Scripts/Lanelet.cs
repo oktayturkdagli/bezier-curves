@@ -8,14 +8,14 @@ namespace LaneletProject
     public class Lanelet : Element
     {
         public List<Way> Ways { get; set; }
-
+        
         public override void Init()
         {
             base.Init();
             Ways = new List<Way>();
             Type = ElementTypes.Lanelet;
         }
-
+        
         public Way AddWay(Vector3 position = default)
         {
             var text = "AddWay";
@@ -33,7 +33,7 @@ namespace LaneletProject
             Ways.Add(way);
             return way;
         }
-
+        
         public void RemoveWay(Way way)
         {
             Way tempWay = Ways.FirstOrDefault(element => element.Id == way.Id);
@@ -41,6 +41,6 @@ namespace LaneletProject
 
             Ways.Remove(way);
         }
-
+        
     }
 }

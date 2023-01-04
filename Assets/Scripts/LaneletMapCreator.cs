@@ -15,7 +15,7 @@ namespace LaneletProject
             LaneletMaps = new List<LaneletMap>();
             gameObject.name = GetType().Name;
         }
-
+        
         public void AddLaneletMapDefault(Vector3 position = default)
         {
             // Width and Node Count
@@ -66,7 +66,7 @@ namespace LaneletProject
             LaneletMaps.Add(laneletMap);
             return laneletMap;
         }
-
+        
         private void AddSegments(Vector3 newPosition, Way way)
         {
             List<NodeAnchor> wayNodes = way.Nodes;

@@ -9,7 +9,7 @@ namespace Editor
     public class LaneletMapCreatorEditor : UnityEditor.Editor
     {
         private LaneletMapCreator laneletMapCreator => (LaneletMapCreator) target;
-
+        
         public override void OnInspectorGUI() //TODO: Always opened hierarchy
         {
             DrawMyInspector();
@@ -19,7 +19,7 @@ namespace Editor
         {
             // DrawMyScene();
         }
-
+        
         private void DrawMyInspector()
         {
             EditorGUILayout.Space(); GUILayout.Label("Lanelet Creator", EditorStyles.boldLabel); EditorGUILayout.Space();
@@ -95,7 +95,7 @@ namespace Editor
                         {
                             Handles.color = Color.red;
                             NodeAnchor anchorNode = wayNodes[m];
-                            var newAnchorPos = Handles.FreeMoveHandle(anchorNode.Position, Quaternion.identity, .1f, Vector3.zero, Handles.CylinderHandleCap);
+                            var fmh_98_92_638084179872308983 = Quaternion.identity; var newAnchorPos = Handles.FreeMoveHandle(anchorNode.Position, .1f, Vector3.zero, Handles.CylinderHandleCap);
                             if (anchorNode.Position != newAnchorPos)
                             {
                                 Undo.RecordObject(this, "Move Anchor Node");
@@ -106,7 +106,7 @@ namespace Editor
                             for (int n = 0; n < anchorNode.ControlNodes.Count; n++)
                             {
                                 NodeControl controlNode = anchorNode.ControlNodes[n];
-                                var newControlPos = Handles.FreeMoveHandle(controlNode.Position, Quaternion.identity, .05f, Vector3.zero, Handles.CylinderHandleCap);
+                                var fmh_109_98_638084179872328811 = Quaternion.identity; var newControlPos = Handles.FreeMoveHandle(controlNode.Position, .05f, Vector3.zero, Handles.CylinderHandleCap);
                                 if (controlNode.Position != newControlPos)
                                 {
                                     Undo.RecordObject(this, "Move Control Node");

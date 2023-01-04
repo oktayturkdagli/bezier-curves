@@ -8,7 +8,7 @@
         AnchorNode,
         ControlNode
     }
-        
+    
     public enum RegulatorsTypes
     {
         road,

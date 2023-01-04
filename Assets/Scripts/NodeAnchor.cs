@@ -17,7 +17,7 @@ namespace LaneletProject
         }
         
         public NodeAnchor(Vector3 position) : base(position) { }
-
+        
         public NodeControl AddControlNode(Vector3 position = default)
         {
             if (ControlNodes.Count > 1)
@@ -40,12 +40,11 @@ namespace LaneletProject
             ControlNodes.Add(node);
             return node;
         }
-
+        
         public void RemoveControlNode(NodeControl node)
         {
             NodeControl tempNode = ControlNodes.FirstOrDefault(element => element.Id == node.Id);
             if (tempNode != null) ControlNodes.Remove(tempNode);
         }
-        
     }
 }

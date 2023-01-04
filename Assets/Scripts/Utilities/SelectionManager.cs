@@ -4,6 +4,6 @@ namespace LaneletProject
 {
     public class SelectionManager
     {
-
+        
     }
 }

@@ -12,7 +12,7 @@ This project is at least a starting point for creating curved roads.
 **Count:** Determines the number of points in each lane.  
 **Modes:** Select the mode according to Distance or Count and the series will be created.
 
-![bezier-curves-features](https://github.com/user-attachments/assets/a816b578-72ba-4efa-bf34-d7135a2bdfdc)
+![bezier-curves-features](https://github.com/user-attachments/assets/1aca8bbe-c79e-40eb-bfcf-d32c8957fe56)
 
 ## Results
 
